@@ -1,5 +1,6 @@
-# lru-cache
-LRU cache php implementation
+# LRU cache php implementation
+
+[Least recently used](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used) cache implementation with simple memory storage and redis storage
 
 Usages:
 
