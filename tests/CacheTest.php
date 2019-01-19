@@ -17,7 +17,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function tearDown()
     {
-        $keys = $this->redis->keys('ulv:cache:lru:*');
+        $keys = $this->redis->keys('ulv:lru-cache:*');
         foreach ($keys as $key) {
             $this->redis->del($key);
         }
@@ -43,7 +43,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $sut->put('a', new Node(10));
         $sut->put('b', new Node(20));
 
-        $this->assertEquals(10, (string)$sut->get('a'));
+        // trigger usage
         $this->assertEquals(20, (string)$sut->get('b'));
 
         $sut->put('c', new Node(30));
