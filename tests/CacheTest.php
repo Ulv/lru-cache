@@ -9,6 +9,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     protected $redis;
 
+    protected $iterations = 10000;
+    protected $capacity = 9990;
+
     public function setUp()
     {
         $this->redis = new \Redis();
@@ -25,13 +28,17 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testPutGet()
     {
-        $sut = new Cache(new MemoryStorage(2));
-        $sut->put('a', new Node(10));
-        $sut->put('b', new Node(20));
-        $sut->put('b', new Node(20));
+        $sut = new Cache(new MemoryStorage($this->capacity));
+        $sut2 = new Cache(new RedisStorage($this->redis,$this->capacity));
 
-        $this->assertEquals(10, (string)$sut->get('a'));
-        $this->assertEquals(20, (string)$sut->get('b'));
+        for($i=0;$i<$this->iterations;$i++) {
+            $key = substr(md5(rand()), 0, 5);
+            $value = substr(md5(rand()), 0, 5);
+            $sut->put($key, new Node($value));
+            $this->assertEquals($value, (string)$sut->get($key));
+            $sut2->put($key, new Node($value));
+            $this->assertEquals($value, (string)$sut2->get($key));
+        }
     }
 
     /**
