@@ -17,6 +17,7 @@ class MemoryStorage extends AbstractStorage
     {
         if ($this->has($key)) {
             unset($this->storage[$key]);
+            $this->delFromLookup($key);
         }
     }
 
