@@ -25,8 +25,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
     public function testPutGet()
     {
-        $sut = new Cache();
+        $sut = new Cache(new MemoryStorage(2));
         $sut->put('a', new Node(10));
+        $sut->put('b', new Node(20));
         $sut->put('b', new Node(20));
 
         $this->assertEquals(10, (string)$sut->get('a'));
@@ -38,7 +39,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testLRU($connector)
     {
-        $sut = new Cache(2, $connector);
+        $sut = new Cache($connector);
         $sut->put('a', new Node(10));
         $sut->put('b', new Node(20));
 
@@ -58,8 +59,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             $this->setUp();
         }
         return [
-            [new MemoryStorage()],
-            [new RedisStorage($this->redis)],
+            [new MemoryStorage(2)],
+            [new RedisStorage($this->redis, 2)],
         ];
     }
 
@@ -68,7 +69,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testLRU2($connector)
     {
-        $sut = new Cache(2, $connector);
+        $sut = new Cache($connector);
         $sut->put('a', new Node(10));
         $sut->put('b', new Node(20));
 
