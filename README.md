@@ -8,22 +8,23 @@ Usages:
 
 1.1. Memory 
 ```
-$connector = new MemoryStorage();
+$cacheCapacity = 256;
+$connector = new MemoryStorage($cacheCapacity);
 ```
 1.2. Redis
 ```
+$cacheCapacity = 256;
 $queueUniqPrefix = uniqid();
 $cacheTtl = 3600;
 $redis = new \Redis();
 $redis->connect('127.0.0.1');
-$connector = new RedisStorage($redis, $queueUniqPrefix, $cacheTtl);
+$connector = new RedisStorage($redis, $cacheCapacity, $queueUniqPrefix, $cacheTtl);
 ```
 
 2. Init cache
 
 ```
-$cacheCapacity = 256;
-$cache = new Cache($cacheCapacity, $connector);
+$cache = new Cache($connector);
 ```
 
 3. Work with cache
